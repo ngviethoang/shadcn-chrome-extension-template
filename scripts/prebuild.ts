@@ -1,5 +1,5 @@
 const prebuildCommands = () => {
-  console.log("Prebuild Script");
-};
+  console.log('Prebuild Script')
+}
 
-export default prebuildCommands;
+export default prebuildCommands

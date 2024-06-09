@@ -11,39 +11,39 @@ const { name }: { name: string } = packageJson
 console.info(' ---> Starting Content Script Build 🤞 <---')
 
 const config = defineConfig({
-    plugins: [react()],
+  plugins: [react()],
 
-    resolve: {
-        alias: [{ find: '@', replacement: path.resolve(__dirname, 'src') }]
+  resolve: {
+    alias: [{ find: '@', replacement: path.resolve(__dirname, 'src') }]
+  },
+
+  define: {
+    'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV || 'development')
+  },
+
+  build: {
+    watch: {
+      include: ['./src/**/*']
     },
 
-    define: {
-        'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV || 'development')
+    outDir: r('dist/js'),
+    cssCodeSplit: false,
+    emptyOutDir: false,
+    sourcemap: isDev ? 'inline' : false,
+
+    lib: {
+      entry: r('src/scripts/content/index.tsx'),
+      name: name,
+      formats: ['iife'] // Bundle everything together so chrome.runtime is available in our React app/components.
     },
 
-    build: {
-        watch: {
-            include: ['./src/**/*']
-        },
-
-        outDir: r('dist/js'),
-        cssCodeSplit: false,
-        emptyOutDir: false,
-        sourcemap: isDev ? 'inline' : false,
-
-        lib: {
-            entry: r('src/scripts/content/index.tsx'),
-            name: name,
-            formats: ['iife'] // Bundle everything together so chrome.runtime is available in our React app/components.
-        },
-
-        rollupOptions: {
-            output: {
-                entryFileNames: 'content.js',
-                extend: true
-            }
-        }
-    } as BuildOptions
+    rollupOptions: {
+      output: {
+        entryFileNames: 'content.js',
+        extend: true
+      }
+    }
+  } as BuildOptions
 })
 
 export default config
