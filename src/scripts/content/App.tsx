@@ -1,17 +1,19 @@
 import { Button } from '@/components/ui/button'
 import { RocketIcon } from 'lucide-react'
 import React, { useEffect, useState } from 'react'
+import MainPopup from './components/MainPopup'
 
 const App = () => {
-  const [isOpen, setIsOpen] = useState(false)
+  const [isShowButton, setIsShowButton] = useState(false)
+  const [isShowMainPopup, setIsShowMainPopup] = useState(false)
 
   const toggleIsOpen = () => {
-    setIsOpen(!isOpen)
+    setIsShowMainPopup(!isShowMainPopup)
   }
 
   useEffect(() => {
     console.log('Gimme: App.tsx')
-    setIsOpen(true)
+    setIsShowButton(true)
     chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
       console.log('Gimme: Message Received', request, sender, sendResponse)
     })
@@ -19,13 +21,14 @@ const App = () => {
 
   return (
     <>
-      {isOpen && (
-        <div className="fixed bottom-4 right-4">
+      {isShowButton && (
+        <div className="fixed bottom-2 right-2">
           <Button onClick={toggleIsOpen} size="icon" className="rounded-full">
             <RocketIcon />
           </Button>
         </div>
       )}
+      {isShowMainPopup && <MainPopup />}
     </>
   )
 }
